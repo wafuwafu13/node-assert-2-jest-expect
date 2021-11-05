@@ -1,9 +1,5 @@
 // Can debug AST at https://astexplorer.net/
-const { transform } = require("@babel/core");
-
-const sourceCode = `function sample(n) {
-  return n * n;
-}`;
+const { transformFileSync } = require("@babel/core");
 
 const plugin = () => {
   return {
@@ -20,6 +16,5 @@ const plugin = () => {
   };
 };
 
-const { code } = transform(sourceCode, { plugins: [plugin] });
-
+const { code } = transformFileSync("sample.js", { plugins: [plugin] });
 console.log(code);
