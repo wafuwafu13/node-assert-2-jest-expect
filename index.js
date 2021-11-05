@@ -1,5 +1,6 @@
 // Can debug AST at https://astexplorer.net/
 const { transformFileSync } = require("@babel/core");
+const { writeFile } = require("fs");
 
 const plugin = () => {
   return {
@@ -19,6 +20,9 @@ const plugin = () => {
   };
 };
 
-const { code } = transformFileSync("sample.js", { plugins: [plugin] });
-console.log("==================================");
-console.log(code);
+const { code } = transformFileSync("in/sample.js", { plugins: [plugin] });
+
+writeFile('out/sample.js', code, (err) => {
+  if (err) throw err;
+  console.log("saved!");
+});
