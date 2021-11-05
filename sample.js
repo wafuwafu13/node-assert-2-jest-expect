@@ -1,4 +1,5 @@
 var assert = require("assert");
+var fs = require('fs');
 
 describe("node-assert-2-jest-expect", () => {
   it("assert", () => {
