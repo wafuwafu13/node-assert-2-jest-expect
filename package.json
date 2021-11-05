@@ -1,0 +1,15 @@
+{
+  "name": "assert-2-jest-expect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "wafuwafu13",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.16.0"
+  }
+}
