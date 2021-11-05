@@ -3,13 +3,10 @@ const { transformFileSync } = require("@babel/core");
 
 const plugin = () => {
   return {
-    pre() {
-      console.log("pre");
-    },
     visitor: {
-      BinaryExpression: (path) => {
-        if (path.node.left.name == "n") {
-          path.node.left.name = "x";
+      CallExpression: (path) => {
+        if (path.node.callee.name == "assert") {
+          console.log("find `assert`");
         }
       },
     },
@@ -17,4 +14,5 @@ const plugin = () => {
 };
 
 const { code } = transformFileSync("sample.js", { plugins: [plugin] });
+console.log("==================================");
 console.log(code);
