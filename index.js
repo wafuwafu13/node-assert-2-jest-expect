@@ -1,4 +1,5 @@
-// Can debug AST at https://astexplorer.net/
+// Debug AST: https://astexplorer.net/
+// Babel Plugin Handbook: https://gist.github.com/wafuwafu13/d424f2eabb870ec4f338f10006eadff0
 const { transformFileSync } = require("@babel/core");
 const { writeFile } = require("fs");
 
