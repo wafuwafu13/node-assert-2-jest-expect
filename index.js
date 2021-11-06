@@ -8,6 +8,7 @@ const plugin = () => {
       VariableDeclaration: (path) => {
         const args = path.node.declarations[0].init.arguments;
         if (args && args[0].value === "assert") {
+          // Remove `var assert = require("assert");`
           path.remove();
         }
       },
