@@ -1,8 +1,9 @@
-var fs = require('fs');
+let fake = require("fake");
 
 describe("node-assert-2-jest-expect", () => {
   it("assert", () => {
-    const one = 1; // -> expect(one).toBeTruthy();
+    const one = 1;
+    fake(one); // -> expect(one).toBeTruthy();
 
     expect(one).toBeTruthy();
   });
