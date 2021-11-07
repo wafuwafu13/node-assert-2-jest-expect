@@ -49,6 +49,27 @@ const plugin = ({ types: t, template }) => {
           const replaceCode = `expect(${arg}).toBeTruthy();`;
           const newAST = template(replaceCode)();
           path.replaceWith(newAST);
+        } else if (
+          /**
+           * ```
+           * const one = 1;
+           * assert.equal(one, 1);
+           * ```
+           * ->
+           * ```
+           * const one = 1;
+           * expect(one).toBe(1);
+           * ```
+           */
+          t.isMemberExpression(path.node.callee) &&
+          path.node.callee.object.name === "assert" &&
+          path.node.callee.property.name === "equal"
+        ) {
+          const actualArg = generate(path.node.arguments[0]).code;
+          const expectedArg = generate(path.node.arguments[1]).code;
+          const replaceCode = `expect(${actualArg}).toBe(${expectedArg});`;
+          const newAST = template(replaceCode)();
+          path.replaceWith(newAST);
         }
       },
     },

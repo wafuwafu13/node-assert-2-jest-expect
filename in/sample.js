@@ -17,4 +17,9 @@ describe("node-assert-2-jest-expect", () => {
     );
     assert(one, "should be passed!");
   });
+
+  it("assert.equal", () => {
+    const one = 1;
+    assert.equal(one, 1);
+  });
 });

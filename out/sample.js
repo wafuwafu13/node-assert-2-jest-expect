@@ -13,4 +13,8 @@ describe("node-assert-2-jest-expect", () => {
     }()).toBeTruthy();
     expect(one).toBeTruthy();
   });
+  it("assert.equal", () => {
+    const one = 1;
+    expect(one).toBe(1);
+  });
 });
