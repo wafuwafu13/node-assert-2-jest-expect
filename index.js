@@ -1,5 +1,7 @@
 // Debug AST: https://astexplorer.net/
 // Babel Plugin Handbook: https://gist.github.com/wafuwafu13/d424f2eabb870ec4f338f10006eadff0
+// Node.js Assert: https://nodejs.org/api/assert.html
+// Jest Expect: https://jestjs.io/docs/expect
 const { transformFileSync } = require("@babel/core");
 const { writeFile } = require("fs");
 
