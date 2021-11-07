@@ -3,7 +3,7 @@
 const { transformFileSync } = require("@babel/core");
 const { writeFile } = require("fs");
 
-const plugin = () => {
+const plugin = ({ types: t, template }) => {
   return {
     visitor: {
       VariableDeclaration: (path) => {
@@ -14,8 +14,11 @@ const plugin = () => {
         }
       },
       CallExpression: (path) => {
-        if (path.node.callee.name == "assert") {
-          console.log("find `assert`");
+        // Replace `assert(one);` -> `expect(one).toBeTruthy();`
+        if (path.node.callee.name === "assert") {
+          const replaceCode = `expect(${path.node.arguments[0].name}).toBeTruthy();`;
+          const newAST = template(replaceCode)();
+          path.replaceWith(newAST);
         }
       },
     },
