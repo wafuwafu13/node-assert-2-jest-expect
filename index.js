@@ -3,6 +3,7 @@
 // Node.js Assert: https://nodejs.org/api/assert.html
 // Jest Expect: https://jestjs.io/docs/expect
 const { transformFileSync } = require("@babel/core");
+const generate = require("@babel/generator").default;
 const { writeFile } = require("fs");
 
 const plugin = ({ types: t, template }) => {
@@ -22,6 +23,12 @@ const plugin = ({ types: t, template }) => {
          * assert(one);
          * assert(1);
          * assert(undefined);
+         * assert(sample());
+         * assert(
+         *   (function () {
+         *     return 1;
+         *   })()
+         * );
          * assert(one, "should be passed!");
          * ```
          * ->
@@ -30,16 +37,15 @@ const plugin = ({ types: t, template }) => {
          * expect(one).toBeTruthy();
          * expect(1).toBeTruthy();
          * expect(undefined).toBeTruthy();
+         * expect(sample()).toBeTruthy();
+         * expect(function () {
+         *   return 1;
+         * }()).toBeTruthy();
          * expect(one).toBeTruthy();
          * ```
          */
         if (path.node.callee.name === "assert") {
-          let arg;
-          if (t.isIdentifier(path.node.arguments[0])) {
-            arg = path.node.arguments[0].name;
-          } else {
-            arg = path.node.arguments[0].value;
-          }
+          const arg = generate(path.node.arguments[0]).code;
           const replaceCode = `expect(${arg}).toBeTruthy();`;
           const newAST = template(replaceCode)();
           path.replaceWith(newAST);

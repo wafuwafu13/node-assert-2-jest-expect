@@ -9,6 +9,12 @@ describe("node-assert-2-jest-expect", () => {
     assert(one);
     assert(1);
     assert(undefined);
+    assert(sample());
+    assert(
+      (function () {
+        return 1;
+      })()
+    );
     assert(one, "should be passed!");
   });
 });

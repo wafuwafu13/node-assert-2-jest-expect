@@ -7,6 +7,10 @@ describe("node-assert-2-jest-expect", () => {
     expect(one).toBeTruthy();
     expect(1).toBeTruthy();
     expect(undefined).toBeTruthy();
+    expect(sample()).toBeTruthy();
+    expect(function () {
+      return 1;
+    }()).toBeTruthy();
     expect(one).toBeTruthy();
   });
 });
