@@ -14,9 +14,29 @@ const plugin = ({ types: t, template }) => {
         }
       },
       CallExpression: (path) => {
-        // Replace `assert(one);` -> `expect(one).toBeTruthy();`
+        /**
+         * ```
+         * const one = 1;
+         * assert(one);
+         * assert(1);
+         * assert(undefined);
+         * ```
+         * ->
+         * ```
+         * const one = 1;
+         * expect(one).toBeTruthy();
+         * expect(1).toBeTruthy();
+         * expect(undefined).toBeTruthy();
+         * ```
+         */
         if (path.node.callee.name === "assert") {
-          const replaceCode = `expect(${path.node.arguments[0].name}).toBeTruthy();`;
+          let arg;
+          if (t.isIdentifier(path.node.arguments[0])) {
+            arg = path.node.arguments[0].name
+          } else {
+            arg = path.node.arguments[0].value
+          }
+          const replaceCode = `expect(${arg}).toBeTruthy();`;
           const newAST = template(replaceCode)();
           path.replaceWith(newAST);
         }

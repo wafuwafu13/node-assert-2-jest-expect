@@ -7,5 +7,7 @@ describe("node-assert-2-jest-expect", () => {
     fake(one);
     // -> expect(one).toBeTruthy();
     assert(one);
+    assert(1);
+    assert(undefined);
   });
 });
