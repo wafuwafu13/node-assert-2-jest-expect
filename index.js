@@ -12,39 +12,46 @@ const plugin = ({ types: t, template }) => {
       VariableDeclaration: (path) => {
         const args = path.node.declarations[0].init.arguments;
         if (args && args[0].value === "assert") {
-          // Remove `var assert = require("assert");`
+          /**
+           * Remove
+           * ```
+           * var assert = require("assert");
+           * ```
+           */
           path.remove();
         }
       },
       CallExpression: (path) => {
-        /**
-         * ```
-         * const one = 1;
-         * assert(one);
-         * assert(1);
-         * assert(undefined);
-         * assert(sample());
-         * assert(
-         *   (function () {
-         *     return 1;
-         *   })()
-         * );
-         * assert(one, "should be passed!");
-         * ```
-         * ->
-         * ```
-         * const one = 1;
-         * expect(one).toBeTruthy();
-         * expect(1).toBeTruthy();
-         * expect(undefined).toBeTruthy();
-         * expect(sample()).toBeTruthy();
-         * expect(function () {
-         *   return 1;
-         * }()).toBeTruthy();
-         * expect(one).toBeTruthy();
-         * ```
-         */
-        if (path.node.callee.name === "assert") {
+        if (
+          /**
+           * ```
+           * const one = 1;
+           * assert(one);
+           * assert(1);
+           * assert(undefined);
+           * assert(sample());
+           * assert(
+           *   (function () {
+           *     return 1;
+           *   })()
+           * );
+           * assert(one, "should be passed!");
+           * ```
+           * ->
+           * ```
+           * const one = 1;
+           * expect(one).toBeTruthy();
+           * expect(1).toBeTruthy();
+           * expect(undefined).toBeTruthy();
+           * expect(sample()).toBeTruthy();
+           * expect(function () {
+           *   return 1;
+           * }()).toBeTruthy();
+           * expect(one).toBeTruthy();
+           * ```
+           */
+          path.node.callee.name === "assert"
+        ) {
           const arg = generate(path.node.arguments[0]).code;
           const replaceCode = `expect(${arg}).toBeTruthy();`;
           const newAST = template(replaceCode)();
