@@ -16,5 +16,9 @@ describe("node-assert-2-jest-expect", () => {
   it("assert.equal", () => {
     const one = 1;
     expect(one).toBe(1);
+    expect(function () {
+      return 1;
+    }()).toBe(1);
+    expect(one).toBe(1);
   });
 });

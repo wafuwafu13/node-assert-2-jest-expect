@@ -61,10 +61,21 @@ const plugin = ({ types: t, template }) => {
            * ```
            * const one = 1;
            * assert.equal(one, 1);
+           * assert(
+           *  (function () {
+           *    return 1;
+           *  })(),
+           *  1
+           *);
+           * assert.equal(one, 1, "should be passed!");
            * ```
            * ->
            * ```
            * const one = 1;
+           * expect(one).toBe(1);
+           * expect(function () {
+           *   return 1;
+           * }()).toBe(1);
            * expect(one).toBe(1);
            * ```
            */
