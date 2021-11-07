@@ -22,6 +22,7 @@ const plugin = ({ types: t, template }) => {
          * assert(one);
          * assert(1);
          * assert(undefined);
+         * assert(one, "should be passed!");
          * ```
          * ->
          * ```
@@ -29,6 +30,7 @@ const plugin = ({ types: t, template }) => {
          * expect(one).toBeTruthy();
          * expect(1).toBeTruthy();
          * expect(undefined).toBeTruthy();
+         * expect(one).toBeTruthy();
          * ```
          */
         if (path.node.callee.name === "assert") {
