@@ -36,9 +36,9 @@ const plugin = ({ types: t, template }) => {
         if (path.node.callee.name === "assert") {
           let arg;
           if (t.isIdentifier(path.node.arguments[0])) {
-            arg = path.node.arguments[0].name
+            arg = path.node.arguments[0].name;
           } else {
-            arg = path.node.arguments[0].value
+            arg = path.node.arguments[0].value;
           }
           const replaceCode = `expect(${arg}).toBeTruthy();`;
           const newAST = template(replaceCode)();
