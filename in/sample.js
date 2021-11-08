@@ -39,4 +39,9 @@ describe("node-assert-2-jest-expect", () => {
     );
     assert.deepEqual(one, 1, "should be passed!");
   });
+
+  it("assert.notEqual", () => {
+    const one = 1;
+    assert.notEqual(one, 0);
+  });
 });
