@@ -30,13 +30,14 @@ describe("node-assert-2-jest-expect", () => {
     assert.equal(one, 1, "should be passed!");
   });
 
-  it("assert.deepEqual", () => {
+  it("assert.deepEqual/strictEqual/deepStrictEqual", () => {
     const one = 1;
     assert.deepEqual(one, 1);
     assert.deepEqual(
       { foo: "bar", hoge: "fuga" },
       { hoge: "fuga", foo: "bar" }
     );
+    assert.strictEqual(one, 1);
     fake.deepEqual(one, 1);
     assert.deepStrictEqual(
       { foo: "bar2", hoge: "fuga2" },
