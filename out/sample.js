@@ -21,4 +21,16 @@ describe("node-assert-2-jest-expect", () => {
     }()).toBe(1);
     expect(one).toBe(1);
   });
+  it("assert.deepEqual", () => {
+    const one = 1;
+    expect(one).toStrictEqual(1);
+    expect({
+      foo: "bar",
+      hoge: "fuga"
+    }).toStrictEqual({
+      hoge: "fuga",
+      foo: "bar"
+    });
+    expect(one).toStrictEqual(1);
+  });
 });

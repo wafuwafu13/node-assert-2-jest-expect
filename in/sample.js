@@ -29,4 +29,14 @@ describe("node-assert-2-jest-expect", () => {
     );
     assert.equal(one, 1, "should be passed!");
   });
+
+  it("assert.deepEqual", () => {
+    const one = 1;
+    assert.deepEqual(one, 1);
+    assert.deepEqual(
+      { foo: "bar", hoge: "fuga" },
+      { hoge: "fuga", foo: "bar" }
+    );
+    assert.deepEqual(one, 1, "should be passed!");
+  });
 });

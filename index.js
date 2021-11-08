@@ -90,6 +90,38 @@ const plugin = ({ types: t, template }) => {
           const replaceCode = `expect(${actualArg}).toBe(${expectedArg});`;
           const newAST = template(replaceCode)();
           path.replaceWith(newAST);
+        } else if (
+          /**
+           * Replace
+           * ```
+           * const one = 1;
+           * assert.deepEqual(one, 1);
+           * assert.deepEqual(
+           *   { foo: "bar", hoge: "fuga" },
+           *   { hoge: "fuga", foo: "bar" }
+           * );
+           * assert.deepEqual(one, 1, "should be passed!");
+           * ```
+           * ->
+           * ```
+           * const one = 1;
+           * expect(one).toStrictEqual(1);
+           * expect({ foo: "bar", hoge: "fuga" }).toStrictEqual({
+           *   hoge: "fuga",
+           *   foo: "bar",
+           * });
+           * expect(one).toStrictEqual(1);
+           * ```
+           */
+          t.isMemberExpression(path.node.callee) &&
+          path.node.callee.object.name === "assert" &&
+          path.node.callee.property.name === "deepEqual"
+        ) {
+          const actualArg = generate(path.node.arguments[0]).code;
+          const expectedArg = generate(path.node.arguments[1]).code;
+          const replaceCode = `expect(${actualArg}).toStrictEqual(${expectedArg});`;
+          const newAST = template(replaceCode)();
+          path.replaceWith(newAST);
         }
       },
     },
