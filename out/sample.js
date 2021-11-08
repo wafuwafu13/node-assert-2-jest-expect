@@ -31,6 +31,14 @@ describe("node-assert-2-jest-expect", () => {
       hoge: "fuga",
       foo: "bar"
     });
+    fake.deepEqual(one, 1);
+    expect({
+      foo: "bar2",
+      hoge: "fuga2"
+    }).toStrictEqual({
+      hoge: "fuga2",
+      foo: "bar2"
+    });
     expect(one).toStrictEqual(1);
   });
   it("assert.notEqual", () => {

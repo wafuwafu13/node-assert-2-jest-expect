@@ -100,6 +100,10 @@ const plugin = ({ types: t, template }) => {
            *   { foo: "bar", hoge: "fuga" },
            *   { hoge: "fuga", foo: "bar" }
            * );
+           * assert.deepStrictEqual(
+           *   { foo: "bar2", hoge: "fuga2" },
+           *   { hoge: "fuga2", foo: "bar2" }
+           * );
            * assert.deepEqual(one, 1, "should be passed!");
            * ```
            * ->
@@ -110,12 +114,17 @@ const plugin = ({ types: t, template }) => {
            *   hoge: "fuga",
            *   foo: "bar",
            * });
+           * expect({ foo: "bar2", hoge: "fuga2" }).toStrictEqual({
+           *   hoge: "fuga2",
+           *   foo: "bar2",
+           * });
            * expect(one).toStrictEqual(1);
            * ```
            */
           t.isMemberExpression(path.node.callee) &&
           path.node.callee.object.name === "assert" &&
-          path.node.callee.property.name === "deepEqual"
+          (path.node.callee.property.name === "deepEqual" ||
+            path.node.callee.property.name === "deepStrictEqual")
         ) {
           const actualArg = generate(path.node.arguments[0]).code;
           const expectedArg = generate(path.node.arguments[1]).code;
