@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "wafuwafu13",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@babel/generator": "^7.16.0"
+    "@babel/generator": "^7.16.0",
+    "jest": "^27.3.1"
   }
 }
