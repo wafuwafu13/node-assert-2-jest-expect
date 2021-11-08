@@ -1,7 +1,7 @@
 var assert = require("assert");
 let fake = require("fake");
-import { equal } from 'assert';
-import { deepEqual } from 'power-assert';
+import { equal } from "assert";
+import { deepEqual } from "power-assert";
 
 describe("node-assert-2-jest-expect", () => {
   it("assert", () => {
@@ -56,5 +56,11 @@ describe("node-assert-2-jest-expect", () => {
   it("assert.notStrictEqual", () => {
     const one = 1;
     assert.notStrictEqual(one, "1a");
+  });
+
+  it("equal/deepEqual", () => {
+    const one = 1;
+    equal(one, 1);
+    deepEqual(one, 1);
   });
 });

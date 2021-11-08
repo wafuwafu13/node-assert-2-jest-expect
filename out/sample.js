@@ -50,4 +50,9 @@ describe("node-assert-2-jest-expect", () => {
     const one = 1;
     expect(one).not.toStrictEqual("1a");
   });
+  it("equal/deepEqual", () => {
+    const one = 1;
+    expect(one).toBe(1);
+    expect(one).toStrictEqual(1);
+  });
 });

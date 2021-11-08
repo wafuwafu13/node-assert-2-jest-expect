@@ -88,6 +88,7 @@ const plugin = ({ types: t, template }) => {
            *  1
            *);
            * assert.equal(one, 1, "should be passed!");
+           * equal(one, 1);
            * ```
            * ->
            * ```
@@ -97,11 +98,13 @@ const plugin = ({ types: t, template }) => {
            *   return 1;
            * }()).toBe(1);
            * expect(one).toBe(1);
+           * expect(one).toBe(1);
            * ```
            */
-          t.isMemberExpression(path.node.callee) &&
+          (t.isMemberExpression(path.node.callee) &&
           path.node.callee.object.name === "assert" &&
-          path.node.callee.property.name === "equal"
+          path.node.callee.property.name === "equal") ||
+          path.node.callee.name === "equal"
         ) {
           const actualArg = generate(path.node.arguments[0]).code;
           const expectedArg = generate(path.node.arguments[1]).code;
@@ -124,6 +127,7 @@ const plugin = ({ types: t, template }) => {
            *   { hoge: "fuga2", foo: "bar2" }
            * );
            * assert.deepEqual(one, 1, "should be passed!");
+           * deepEqual(one, 1);
            * ```
            * ->
            * ```
@@ -139,13 +143,15 @@ const plugin = ({ types: t, template }) => {
            *   foo: "bar2",
            * });
            * expect(one).toStrictEqual(1);
+           * expect(one).toStrictEqual(1);
            * ```
            */
-          t.isMemberExpression(path.node.callee) &&
-          path.node.callee.object.name === "assert" &&
-          (path.node.callee.property.name === "deepEqual" ||
-            path.node.callee.property.name === "strictEqual" ||
-            path.node.callee.property.name === "deepStrictEqual")
+          (t.isMemberExpression(path.node.callee) &&
+            path.node.callee.object.name === "assert" &&
+            (path.node.callee.property.name === "deepEqual" ||
+              path.node.callee.property.name === "strictEqual" ||
+              path.node.callee.property.name === "deepStrictEqual")) ||
+          path.node.callee.name === "deepEqual"
         ) {
           const actualArg = generate(path.node.arguments[0]).code;
           const expectedArg = generate(path.node.arguments[1]).code;
