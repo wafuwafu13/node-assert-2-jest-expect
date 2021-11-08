@@ -24,6 +24,7 @@ const plugin = ({ types: t, template }) => {
       CallExpression: (path) => {
         if (
           /**
+           * Replace
            * ```
            * const one = 1;
            * assert(one);
@@ -58,6 +59,7 @@ const plugin = ({ types: t, template }) => {
           path.replaceWith(newAST);
         } else if (
           /**
+           * Replace
            * ```
            * const one = 1;
            * assert.equal(one, 1);
