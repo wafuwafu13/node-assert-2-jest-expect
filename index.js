@@ -11,13 +11,31 @@ const plugin = ({ types: t, template }) => {
     visitor: {
       VariableDeclaration: (path) => {
         const args = path.node.declarations[0].init.arguments;
-        if (args && args[0].value === "assert") {
+        if (
           /**
            * Remove
            * ```
            * var assert = require("assert");
            * ```
            */
+          args &&
+          args[0].value === "assert"
+        ) {
+          path.remove();
+        }
+      },
+      ImportDeclaration: (path) => {
+        if (
+          /**
+           * Remove
+           * ```
+           * import assert from 'assert';
+           * import assert from 'power-assert';
+           * ```
+           */
+          path.node.source.value === "assert" ||
+          path.node.source.value === "power-assert"
+        ) {
           path.remove();
         }
       },
