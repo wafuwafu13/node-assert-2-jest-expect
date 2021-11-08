@@ -156,6 +156,28 @@ const plugin = ({ types: t, template }) => {
           const replaceCode = `expect(${actualArg}).not.toBe(${expectedArg});`;
           const newAST = template(replaceCode)();
           path.replaceWith(newAST);
+        } else if (
+          /**
+           * Replace
+           * ```
+           * const one = 1;
+           * assert.notStrictEqual(one, "1");
+           * ```
+           * ->
+           * ```
+           * const one = 1;
+           * expect(one).not.toStrictEqual("1");
+           * ```
+           */
+          t.isMemberExpression(path.node.callee) &&
+          path.node.callee.object.name === "assert" &&
+          path.node.callee.property.name === "notStrictEqual"
+        ) {
+          const actualArg = generate(path.node.arguments[0]).code;
+          const expectedArg = generate(path.node.arguments[1]).code;
+          const replaceCode = `expect(${actualArg}).not.toStrictEqual(${expectedArg});`;
+          const newAST = template(replaceCode)();
+          path.replaceWith(newAST);
         }
       },
     },

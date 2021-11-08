@@ -46,4 +46,8 @@ describe("node-assert-2-jest-expect", () => {
     const one = 1;
     expect(one).not.toBe(0);
   });
+  it("assert.notStrictEqual", () => {
+    const one = 1;
+    expect(one).not.toStrictEqual("1a");
+  });
 });
