@@ -19,6 +19,7 @@ const plugin = ({ types: t, template }) => {
            * ```
            */
           args &&
+          args.length &&
           args[0].value === "assert"
         ) {
           path.remove();
