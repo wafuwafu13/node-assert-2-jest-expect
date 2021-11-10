@@ -10,7 +10,7 @@ const plugin = ({ types: t, template }) => {
   return {
     visitor: {
       VariableDeclaration: (path) => {
-        const args = path.node.declarations[0].init.arguments;
+        const init = path.node.declarations[0].init;
         if (
           /**
            * Remove
@@ -18,9 +18,10 @@ const plugin = ({ types: t, template }) => {
            * var assert = require("assert");
            * ```
            */
-          args &&
-          args.length &&
-          args[0].value === "assert"
+          init &&
+          init.arguments &&
+          init.arguments[0] &&
+          init.arguments[0].value === "assert"
         ) {
           path.remove();
         }
@@ -103,8 +104,8 @@ const plugin = ({ types: t, template }) => {
            * ```
            */
           (t.isMemberExpression(path.node.callee) &&
-          path.node.callee.object.name === "assert" &&
-          path.node.callee.property.name === "equal") ||
+            path.node.callee.object.name === "assert" &&
+            path.node.callee.property.name === "equal") ||
           path.node.callee.name === "equal"
         ) {
           const actualArg = generate(path.node.arguments[0]).code;
