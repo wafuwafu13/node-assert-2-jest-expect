@@ -252,7 +252,7 @@ const nodeToJest = async () => {
       console.log(`S=============${file}============S`);
       const { code } = await transformFileAsync(`in/${file}`, {
         plugins: [plugin],
-        presets: ["@babel/preset-react"],
+        presets: ["@babel/preset-react", "@babel/preset-typescript"],
       });
       await fs.promises.writeFile(`./out/${file}`, code);
       console.log(`E=============${file}============E`);
