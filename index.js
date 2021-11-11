@@ -2,9 +2,9 @@
 // Babel Plugin Handbook: https://gist.github.com/wafuwafu13/d424f2eabb870ec4f338f10006eadff0
 // Node.js Assert: https://nodejs.org/api/assert.html
 // Jest Expect: https://jestjs.io/docs/expect
-const { transformFileSync } = require("@babel/core");
+const { transformFileAsync } = require("@babel/core");
 const generate = require("@babel/generator").default;
-const { writeFile } = require("fs");
+const fs = require("fs");
 
 const plugin = ({ types: t, template }) => {
   const hasJSXElementArgument = (args) => {
@@ -245,12 +245,21 @@ const plugin = ({ types: t, template }) => {
   };
 };
 
-const { code } = transformFileSync("in/sample.js", {
-  plugins: [plugin],
-  presets: ["@babel/preset-react"],
-});
+const nodeToJest = async () => {
+  try {
+    const files = await fs.promises.readdir("./in");
+    for (const file of files) {
+      console.log(`S=============${file}============S`);
+      const { code } = await transformFileAsync(`in/${file}`, {
+        plugins: [plugin],
+        presets: ["@babel/preset-react"],
+      });
+      await fs.promises.writeFile(`./out/${file}`, code);
+      console.log(`E=============${file}============E`);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 
-writeFile("out/sample.js", code, (err) => {
-  if (err) throw err;
-  console.log("saved!");
-});
+nodeToJest();
