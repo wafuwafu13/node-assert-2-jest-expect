@@ -9,6 +9,8 @@ describe("node-assert-2-jest-expect", () => {
     fake(one);
     const fake = fake();
     const fakeComponent = fake(<Fake />);
+    assert(<Fake />);
+    assert(fake.fake(<fake />));
 
     assert(one);
     assert(1);
@@ -23,6 +25,8 @@ describe("node-assert-2-jest-expect", () => {
   });
 
   it("assert.equal", () => {
+    assert.equal(<Fake />, 1);
+    assert.equal(fake.fake(<fake />), 1);
     const one = 1;
     assert.equal(one, 1);
     assert.equal(
@@ -35,6 +39,8 @@ describe("node-assert-2-jest-expect", () => {
   });
 
   it("assert.deepEqual/strictEqual/deepStrictEqual", () => {
+    assert.deepEqual(<Fake />, 1);
+    assert.deepEqual(fake.fake(<fake />), 1);
     const one = 1;
     assert.deepEqual(one, 1);
     assert.deepEqual(

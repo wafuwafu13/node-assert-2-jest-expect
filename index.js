@@ -7,6 +7,13 @@ const generate = require("@babel/generator").default;
 const { writeFile } = require("fs");
 
 const plugin = ({ types: t, template }) => {
+  const hasJSXElementArgument = (args) => {
+    return (
+      t.isJSXElement(args) ||
+      (t.isCallExpression(args) && t.isJSXElement(args.arguments[0]))
+    );
+  };
+
   return {
     visitor: {
       VariableDeclaration: (path) => {
@@ -73,6 +80,17 @@ const plugin = ({ types: t, template }) => {
            */
           path.node.callee.name === "assert"
         ) {
+          if (
+            /**
+             * Skip
+             * ```
+             * assert(<Fake />)
+             * assert(fake.fake(<fake />));
+             * ```
+             */
+            hasJSXElementArgument(path.node.arguments[0])
+          )
+            return;
           const arg = generate(path.node.arguments[0]).code;
           const replaceCode = `expect(${arg}).toBeTruthy();`;
           const newAST = template(replaceCode)();
@@ -108,6 +126,17 @@ const plugin = ({ types: t, template }) => {
             path.node.callee.property.name === "equal") ||
           path.node.callee.name === "equal"
         ) {
+          if (
+            /**
+             * Skip
+             * ```
+             * assert.equal(<Fake />, 1)
+             * assert.equal(fake.fake(<fake />), 1);
+             * ```
+             */
+            hasJSXElementArgument(path.node.arguments[0])
+          )
+            return;
           const actualArg = generate(path.node.arguments[0]).code;
           const expectedArg = generate(path.node.arguments[1]).code;
           const replaceCode = `expect(${actualArg}).toBe(${expectedArg});`;
@@ -155,6 +184,7 @@ const plugin = ({ types: t, template }) => {
               path.node.callee.property.name === "deepStrictEqual")) ||
           path.node.callee.name === "deepEqual"
         ) {
+          if (hasJSXElementArgument(path.node.arguments[0])) return;
           const actualArg = generate(path.node.arguments[0]).code;
           const expectedArg = generate(path.node.arguments[1]).code;
           const replaceCode = `expect(${actualArg}).toStrictEqual(${expectedArg});`;
@@ -177,6 +207,7 @@ const plugin = ({ types: t, template }) => {
           path.node.callee.object.name === "assert" &&
           path.node.callee.property.name === "notEqual"
         ) {
+          if (hasJSXElementArgument(path.node.arguments[0])) return;
           const actualArg = generate(path.node.arguments[0]).code;
           const expectedArg = generate(path.node.arguments[1]).code;
           const replaceCode = `expect(${actualArg}).not.toBe(${expectedArg});`;
@@ -199,6 +230,7 @@ const plugin = ({ types: t, template }) => {
           path.node.callee.object.name === "assert" &&
           path.node.callee.property.name === "notStrictEqual"
         ) {
+          if (hasJSXElementArgument(path.node.arguments[0])) return;
           const actualArg = generate(path.node.arguments[0]).code;
           const expectedArg = generate(path.node.arguments[1]).code;
           const replaceCode = `expect(${actualArg}).not.toStrictEqual(${expectedArg});`;
