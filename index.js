@@ -206,11 +206,17 @@ const plugin = ({ types: t, template }) => {
           path.replaceWith(newAST);
         }
       },
+      JSXElement: (path) => {
+        path.skip();
+      },
     },
   };
 };
 
-const { code } = transformFileSync("in/sample.js", { plugins: [plugin] });
+const { code } = transformFileSync("in/sample.js", {
+  plugins: [plugin],
+  presets: ["@babel/preset-react"],
+});
 
 writeFile("out/sample.js", code, (err) => {
   if (err) throw err;

@@ -12,6 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/generator": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
     "jest": "^27.3.1"
   }
 }

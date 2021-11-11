@@ -8,6 +8,7 @@ describe("node-assert-2-jest-expect", () => {
     const one = 1;
     fake(one);
     const fake = fake();
+    const fakeComponent = fake(<Fake />);
 
     assert(one);
     assert(1);
