@@ -22,6 +22,7 @@ describe("node-assert-2-jest-expect", () => {
       })()
     );
     assert(one, "should be passed!");
+    assert(!one);
   });
 
   it("assert.equal", () => {
@@ -36,6 +37,8 @@ describe("node-assert-2-jest-expect", () => {
       1
     );
     assert.equal(one, 1, "should be passed!");
+    assert.equal(!one, 2);
+    assert.equal(!one, 2, "should be passed!");
   });
 
   it("assert.deepEqual/strictEqual/deepStrictEqual", () => {

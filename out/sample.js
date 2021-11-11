@@ -16,6 +16,7 @@ describe("node-assert-2-jest-expect", () => {
       return 1;
     }()).toBeTruthy();
     expect(one).toBeTruthy();
+    expect(!one).toBeTruthy();
   });
   it("assert.equal", () => {
     assert.equal(<Fake />, 1);
@@ -26,6 +27,8 @@ describe("node-assert-2-jest-expect", () => {
       return 1;
     }()).toBe(1);
     expect(one).toBe(1);
+    expect(!one).toBe(2);
+    expect(!one).toBe(2);
   });
   it("assert.deepEqual/strictEqual/deepStrictEqual", () => {
     assert.deepEqual(<Fake />, 1);
