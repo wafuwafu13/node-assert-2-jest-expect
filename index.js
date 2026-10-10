@@ -245,15 +245,18 @@ const plugin = ({ types: t, template }) => {
   };
 };
 
+const transform = (file) =>
+  transformFileAsync(file, {
+    plugins: [plugin],
+    presets: ["@babel/preset-react", "@babel/preset-typescript"],
+  });
+
 const nodeToJest = async () => {
   try {
     const files = await fs.promises.readdir("./in");
     for (const file of files) {
       console.log(`S=============${file}============S`);
-      const { code } = await transformFileAsync(`in/${file}`, {
-        plugins: [plugin],
-        presets: ["@babel/preset-react", "@babel/preset-typescript"],
-      });
+      const { code } = await transform(`in/${file}`);
       await fs.promises.writeFile(`./out/${file}`, code);
       console.log(`E=============${file}============E`);
     }
@@ -262,4 +265,10 @@ const nodeToJest = async () => {
   }
 };
 
-nodeToJest();
+// Only run the transform when invoked as `node index.js`, so that the
+// snapshot test can `require` this file without writing to `out/`.
+if (require.main === module) {
+  nodeToJest();
+}
+
+module.exports = { plugin, transform };
